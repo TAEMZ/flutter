@@ -30,8 +30,8 @@ class _UserListState extends State<UserList> {
   }
 
   Future<void> fetchUsers() async {
-    final response = await http
-        .get(Uri.parse('https://0a0c-196-190-61-189.ngrok-free.app/users'));
+    final response =
+        await http.get(Uri.parse('https://flutt.onrender.com/users'));
 
     if (response.statusCode == 200) {
       setState(() {
