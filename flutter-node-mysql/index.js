@@ -3,17 +3,21 @@ const mysql = require("mysql2");
 const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // Use Vercel's dynamic port or fallback to 3000
 
-// Constructing the connection string
-const connectionString = `mysql://${process.env.DB_USERNAME}:${
-  process.env.DB_PASSWORD
-}@${process.env.DB_HOST}:${process.env.DB_PORT || 3306}/${process.env.DB_NAME}`;
+// Configure CORS to allow access from any origin
+app.use(cors());
 
-// Create a connection using the connection string
-const db = mysql.createConnection(connectionString);
+// MySQL Connection Configuration
+const db = mysql.createConnection({
+  host: process.env.DB_HOST, // MySQL server hostname
+  user: process.env.DB_USER, // MySQL username
+  password: process.env.DB_PASS, // MySQL password
+  database: process.env.DB_NAME, // MySQL database name
+  port: process.env.DB_PORT || 3306, // MySQL port (default: 3306)
+});
 
-// Connect to the database
+// Connect to MySQL Database
 db.connect((err) => {
   if (err) {
     console.error("Error connecting to the database:", err);
@@ -22,7 +26,7 @@ db.connect((err) => {
   console.log("Connected to MySQL Database!");
 });
 
-// Define an API endpoint
+// Define an API Endpoint
 app.get("/users", (req, res) => {
   db.query("SELECT * FROM users", (err, results) => {
     if (err) {
@@ -35,6 +39,7 @@ app.get("/users", (req, res) => {
   });
 });
 
+// Start the Server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
